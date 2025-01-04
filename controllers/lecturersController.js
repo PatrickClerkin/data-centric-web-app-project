@@ -31,10 +31,7 @@ exports.updateLecturer = async (req, res) => {
     const { name, did } = req.body;
     try {
         const db = await connectMongo();
-        const result = await db.collection('lecturers').updateOne(
-            { _id },
-            { $set: { name, did } }
-        );
+        const result = await db.collection('lecturers').updateOne({ _id }, { $set: { name, did } });
         if (result.matchedCount === 0) {
             return res.status(404).send('Lecturer not found');
         }
@@ -42,5 +39,21 @@ exports.updateLecturer = async (req, res) => {
     } catch (err) {
         console.error('Error updating lecturer:', err.message);
         res.status(500).send('Error updating lecturer');
+    }
+};
+
+// Delete a lecturer
+exports.deleteLecturer = async (req, res) => {
+    const { _id } = req.params;
+    try {
+        const db = await connectMongo();
+        const result = await db.collection('lecturers').deleteOne({ _id });
+        if (result.deletedCount === 0) {
+            return res.status(404).send('Lecturer not found');
+        }
+        res.send('Lecturer deleted successfully');
+    } catch (err) {
+        console.error('Error deleting lecturer:', err.message);
+        res.status(500).send('Error deleting lecturer');
     }
 };

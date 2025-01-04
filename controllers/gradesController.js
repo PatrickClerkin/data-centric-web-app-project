@@ -1,36 +1,12 @@
-const pool = require('../config/mysql');
+const connectMySQL = require('../config/mysql');
 
-// Fetch all grades
-exports.getAllGrades = async (req, res) => {
-    try {
-        const [grades] = await pool.query('SELECT * FROM grade');
-        res.json(grades); // Return grades as JSON
-    } catch (err) {
-        console.error('Error fetching grades:', err.message);
-        res.status(500).send('Error retrieving grades');
-    }
-};
-
-// Add a new grade
-exports.addGrade = async (req, res) => {
-    const { sid, mid, grade } = req.body;
-    try {
-        await pool.query('INSERT INTO grade (sid, mid, grade) VALUES (?, ?, ?)', [sid, mid, grade]);
-        res.status(201).send('Grade added successfully');
-    } catch (err) {
-        console.error('Error adding grade:', err.message);
-        res.status(500).send('Error adding grade');
-    }
-};
-
-// Update an existing grade
+// Update a grade
 exports.updateGrade = async (req, res) => {
-    const { sid, mid, grade } = req.body;
+    const { sid, mid } = req.params;
+    const { grade } = req.body;
     try {
-        const [result] = await pool.query(
-            'UPDATE grade SET grade = ? WHERE sid = ? AND mid = ?',
-            [grade, sid, mid]
-        );
+        const db = await connectMySQL();
+        const [result] = await db.execute('UPDATE grade SET grade = ? WHERE sid = ? AND mid = ?', [grade, sid, mid]);
         if (result.affectedRows === 0) {
             return res.status(404).send('Grade not found');
         }
@@ -38,5 +14,21 @@ exports.updateGrade = async (req, res) => {
     } catch (err) {
         console.error('Error updating grade:', err.message);
         res.status(500).send('Error updating grade');
+    }
+};
+
+// Delete a grade
+exports.deleteGrade = async (req, res) => {
+    const { sid, mid } = req.params;
+    try {
+        const db = await connectMySQL();
+        const [result] = await db.execute('DELETE FROM grade WHERE sid = ? AND mid = ?', [sid, mid]);
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Grade not found');
+        }
+        res.send('Grade deleted successfully');
+    } catch (err) {
+        console.error('Error deleting grade:', err.message);
+        res.status(500).send('Error deleting grade');
     }
 };
