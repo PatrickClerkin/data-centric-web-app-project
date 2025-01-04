@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('./config/mysql'); // MySQL connection pool
-const studentsRoutes = require('./routes/students'); // Students route
+const studentsRoutes = require('./routes/students'); // Students routes
+const gradesRoutes = require('./routes/grades'); // Grades routes
 
 const app = express();
 
@@ -18,12 +19,15 @@ app.get('/test-db', async (req, res) => {
     }
 });
 
-// Connect the /students route
+// Connect the /students routes
 app.use('/students', studentsRoutes);
+
+// Connect the /grades routes
+app.use('/grades', gradesRoutes);
 
 // Default route
 app.get('/', (req, res) => {
-    res.send('<h1>Welcome to the Data-Centric Web App</h1><a href="/students">Go to Students</a>');
+    res.send('<h1>Welcome to the Data-Centric Web App</h1><a href="/students">Go to Students</a> | <a href="/grades">Go to Grades</a>');
 });
 
 // Start the server
