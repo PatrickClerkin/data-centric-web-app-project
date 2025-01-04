@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('./config/mysql'); // MySQL connection pool
 const studentsRoutes = require('./routes/students'); // Students routes
 const gradesRoutes = require('./routes/grades'); // Grades routes
+const modulesRoutes = require('./routes/modules');
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.use('/students', studentsRoutes);
 
 // Connect the /grades routes
 app.use('/grades', gradesRoutes);
+
+app.use('/modules', modulesRoutes);
 
 // Default route
 app.get('/', (req, res) => {
