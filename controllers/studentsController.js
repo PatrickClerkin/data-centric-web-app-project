@@ -23,7 +23,7 @@ exports.addStudent = async (req, res) => {
     }
 };
 
-// Update an existing student
+// Update an existing students
 exports.updateStudent = async (req, res) => {
     const { sid } = req.params;
     const { name, age } = req.body;
