@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const gradesController = require('../controllers/gradesController');
 
-router.post('/edit/:sid/:mid', gradesController.updateGrade);
-router.delete('/delete/:sid/:mid', gradesController.deleteGrade);
+// Routes for Grades
+router.get('/', gradesController.getAllGrades);
+router.get('/edit/:sid/:mid', gradesController.renderEditGradePage);
+router.post('/edit/:sid/:mid', gradesController.updateGradeWithValidation);
 
 module.exports = router;

@@ -3,8 +3,8 @@ const router = express.Router();
 const lecturersController = require('../controllers/lecturersController');
 
 router.get('/', lecturersController.getAllLecturers);
-router.post('/add', lecturersController.addLecturer);
-router.post('/edit/:_id', lecturersController.updateLecturer);
-router.delete('/delete/:_id', lecturersController.deleteLecturer);
+router.get('/add', lecturersController.renderAddLecturerPage);
+router.post('/add', lecturersController.addLecturerWithValidation);
+router.post('/delete/:_id', lecturersController.deleteLecturer); // Updated to POST for form compatibility
 
 module.exports = router;
